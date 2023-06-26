@@ -76,26 +76,31 @@
 
                                     <div class="post-img">
 
-                                        <img class="col-sm-2" src="/storage/BlogImages/{{ $blog->image }}" width="20" alt="no image" >
+                                        <img class="col-sm-2" src="/storage/BlogImages/{{ $blog->image }}"style="width: 400px; height: 300px " >
                                     </div>
 
                                     <h2 class="title">
-                                        <a href="blog-details.html">{{ $blog->title }}</a>
+                                        <a href="blogs/{{ $blog->id }}">{{ $blog->title }}</a>
                                     </h2>
 
                                     <div class="meta-top">
                                         <ul>
                                             <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">{{ $blog->name }}</a></li>
                                             <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html">{{ $blog->date }}</a></li>
-{{--
-                                            <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="blog-details.html">{{ $blog->comments->count() }}</a></li>
---}}
+                                            <li class="d-flex align-items-center">
+                                                <i class="bi bi-chat-dots"></i>
+                                                @if ($blog->comments->count() === 0)
+                                                    <a href="blog-details.html">none</a>
+                                                @else
+                                                    <a href="blog-details.html">{{ $blog->comments->count() }}</a>
+                                                @endif
+                                            </li>
                                         </ul>
                                     </div>
 
                                     <div class="content">
                                         <p>
-                                            {{ $blog->description }}                                        </p>
+                                            {{ $blog->description }}</p>
                                     </div>
 
                                     <div class="read-more mt-auto align-self-end">
