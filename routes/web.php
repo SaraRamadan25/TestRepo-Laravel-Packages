@@ -35,14 +35,14 @@ Route::get('download', function () {
 });
 
 Route::get('/invoice', function () {
-    // return view('invoice');
+     return view('invoice');
 
     $pdf = PDF::loadView('invoice');
     return $pdf->download('invoice.pdf');
 });
 
 Route::get('/invoice-pdf', function () {
-    // return view('invoice-pdf');
+     return view('invoice-pdf');
 
     $pdf = PDF::loadView('invoice-pdf');
     return $pdf->download('invoice.pdf');
