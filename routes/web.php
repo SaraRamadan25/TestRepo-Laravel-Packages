@@ -2,6 +2,7 @@
 
 use App\Exports\UsersExport;
 use App\Http\Controllers\BlogController;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -31,4 +32,18 @@ Route::delete('/blogs/{blog}', [BlogController::class,'destroy'])->name('blogs.d
 
 Route::get('download', function () {
     return Excel::download(new UsersExport, 'users.xlsx');
+});
+
+Route::get('/invoice', function () {
+    // return view('invoice');
+
+    $pdf = PDF::loadView('invoice');
+    return $pdf->download('invoice.pdf');
+});
+
+Route::get('/invoice-pdf', function () {
+    // return view('invoice-pdf');
+
+    $pdf = PDF::loadView('invoice-pdf');
+    return $pdf->download('invoice.pdf');
 });
