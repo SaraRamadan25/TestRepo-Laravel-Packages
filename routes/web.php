@@ -1,9 +1,12 @@
 <?php
 
 use App\Exports\UsersExport;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BlogController;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 use Maatwebsite\Excel\Facades\Excel;
 
 /*
@@ -47,3 +50,11 @@ Route::get('/invoice-pdf', function () {
     $pdf = PDF::loadView('invoice-pdf');
     return $pdf->download('invoice.pdf');
 });
+
+
+Route::get('login/github', [LoginController::class,'redirectToProvider']);
+Route::get('login/github/callback', [LoginController::class,'handleProviderCallback']);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
