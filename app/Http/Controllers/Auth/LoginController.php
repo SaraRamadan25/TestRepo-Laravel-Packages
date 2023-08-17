@@ -51,7 +51,6 @@ class LoginController extends Controller
     #[NoReturn] public function handleProviderCallback(): \Illuminate\Foundation\Application|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         $githubUser = Socialite::driver('github')->user();
-/*        dd($githubUser);*/
         $user = User::where('provider_id', $githubUser->getId())->first();
 
         if (!$user) {
