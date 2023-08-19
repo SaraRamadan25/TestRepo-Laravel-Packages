@@ -1,30 +1,17 @@
 <?php
 
-use App\Models\Post;
+use App\Events\SomeEvent;
+use App\Mail\OrderShipped;
 use App\Models\User;
 use App\Jobs\SomeJob;
-use App\Jobs\BatchJob;
-use App\Events\SomeEvent;
-use Illuminate\Bus\Batch;
-use App\Mail\OrderShipped;
-use Illuminate\Http\Request;
 use App\Notifications\InvoicePaid;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,26 +31,11 @@ Route::get('/jobs/{jobs}', function ($jobs) {
     return 'Jobs processing!';
 });
 
-Route::get('/batchjobs', function () {
-    $user = User::find(1);
-
-    $batch = Bus::batch([
-        new BatchJob(User::find(1)),
-        new BatchJob(User::find(2)),
-        new BatchJob(User::find(1)),
-        new BatchJob(User::find(2)),
-    ])->then(function (Batch $batch) {
-        Log::info('My Batch of Jobs was completed and all successful!');
-    })->catch(function (Batch $batch, Throwable $e) {
-        // First batch job failure detected...
-    })->finally(function (Batch $batch) {
-        // The batch has finished executing...
-        Log::info('My Batch of Jobs has finished executing');
-    })->name('My Batch of Jobs')
-        ->dispatch();
-
-    return 'Batch: ' . $batch->id . ' is processing.';
+Route::get('/delete', function(){
+   User::find(1)->delete();
+    return 'User deleted';
 });
+
 
 Route::get('/cache', function () {
     if (Cache::get('user')) {
@@ -77,33 +49,24 @@ Route::get('/cache', function () {
 
 Route::get('/dumps', function () {
     $user1 = User::find(1)->toArray();
-    $user2 = User::find(2)->toArray();
 
     dump($user1);
-    dump($user2);
 
-    return 'Dump completed 💩';
+    return 'Dump completed !';
 });
 
 Route::get('/events', function () {
-    event(new SomeEvent(User::find(1)));
+    event(new SomeEvent(User::find(2)));
 
     return 'Event fired';
 });
 
 Route::get('/exceptions', function () {
-    throw new Exception('A new exception was thrown!');
+    throw new Exception('is it the end of the world?');
 });
 
-Route::get('/posts/{post}/edit', function (Post $post, Request $request) {
-    return 'View for editing post';
-})->middleware('can:update,post');
 
-Route::get('/views', function () {
-    return view('index', [
-        'foo' => 'bar'
-    ]);
-});
+
 
 Route::get('/logs', function () {
     Log::emergency('Emergency');
@@ -125,20 +88,15 @@ Route::get('/mail', function () {
 });
 
 Route::get('/notifications', function () {
-    $user = User::find(1);
+    $user = User::find(2);
 
     $user->notify(new InvoicePaid);
 
     return 'Notification sent';
 });
 
-Route::get('/redis', function () {
-    Redis::set('name', 'Andre');
-    $value = Redis::get('name');
 
-    return 'Redis items set.';
-});
 
-Route::get('/failedrequest', function () {
-    return response()->json('Fail', 500);
-});
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

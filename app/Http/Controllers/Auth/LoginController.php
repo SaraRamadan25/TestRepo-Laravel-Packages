@@ -3,12 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
-use JetBrains\PhpStorm\NoReturn;
-use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -30,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected string $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -40,28 +36,5 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-    }
-
-
-    public function redirectToProvider(): \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
-    {
-        return Socialite::driver('github')->redirect();
-    }
-
-    #[NoReturn] public function handleProviderCallback(): \Illuminate\Foundation\Application|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
-    {
-        $githubUser = Socialite::driver('github')->user();
-        $user = User::where('provider_id', $githubUser->getId())->first();
-
-        if (!$user) {
-            $user = User::create([
-                'email' => $githubUser->getEmail(),
-                'name' => $githubUser->getName(),
-                'provider_id' => $githubUser->getId(),
-            ]);
-        }
-        Auth::login($user, true);
-
-        return redirect($this->redirectTo);
     }
 }
