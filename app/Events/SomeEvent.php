@@ -17,12 +17,11 @@ class SomeEvent implements ShouldBroadcast
 
     public $user;
 
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->user = $user;
     }
-    public function broadcastOn(): PrivateChannel
+    public function broadcastOn(): Channel
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('public.some.1');
     }
 }

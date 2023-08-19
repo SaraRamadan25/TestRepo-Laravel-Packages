@@ -55,11 +55,7 @@ Route::get('/dumps', function () {
     return 'Dump completed !';
 });
 
-Route::get('/events', function () {
-    event(new SomeEvent(User::find(2)));
 
-    return 'Event fired';
-});
 
 Route::get('/exceptions', function () {
     throw new Exception('is it the end of the world?');
@@ -101,6 +97,18 @@ Route::get('/notifications', function () {
     $value = Redis::get('name');
     return 'Redis items set.';
 });*/
+
+
+
+Route::get('some', function () {
+event(new SomeEvent());
+/*$url = Url::temporarySignedRoute(
+    'share-video', now()->addSeconds(30), [
+        'video' => 123
+    ]);
+return $url;*/
+return null;
+});
 
 Auth::routes();
 
