@@ -95,7 +95,12 @@ Route::get('/notifications', function () {
     return 'Notification sent';
 });
 
-
+/*Route::get('/redis', function () {
+    Redis::enableEvents();
+    Redis::set('name', 'Sara');
+    $value = Redis::get('name');
+    return 'Redis items set.';
+});*/
 
 Auth::routes();
 
